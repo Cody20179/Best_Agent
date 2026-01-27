@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+  font-family: 'Manrope', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --panel: #fffdf9;
+  --line: #e7dfd4;
+  --muted: #7b7166;
+  --shadow: 0 20px 60px rgba(30, 24, 16, 0.16);
+  --bg: #f3efe8;
+  --text: #1f1a14;
+  --surface: #f6f2ec;
+  --bubble-me: linear-gradient(135deg, #f9b97a, #f18a5d);
+  --bubble-them: #ffffff;
+  --header: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(244, 242, 237, 0.7));
+  --input: #ffffff;
+  --chip: #f1ebe3;
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+html[data-theme='dark'] {
+  --panel: #1b1917;
+  --line: #2e2a26;
+  --muted: #b3a79b;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --bg: #0f0d0b;
+  --text: #f3eee7;
+  --surface: #1a1715;
+  --bubble-me: linear-gradient(135deg, #f1a96b, #d87a52);
+  --bubble-them: #24211e;
+  --header: linear-gradient(135deg, rgba(32, 29, 26, 0.9), rgba(20, 18, 16, 0.9));
+  --input: #201d1a;
+  --chip: #23201c;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #f7efe4 0%, #efe7db 50%, #e6ddcf 100%);
+  color: inherit;
+}
+
+html[data-theme='dark'] body {
+  background: radial-gradient(circle at 20% 10%, rgba(92, 73, 56, 0.35), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(60, 48, 40, 0.45), transparent 45%),
+    linear-gradient(160deg, #0f0d0b 0%, #13110f 50%, #0b0a09 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

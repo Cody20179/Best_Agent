@@ -5,7 +5,7 @@ Check_Init = None
 
 conn_str = (
     "Driver={ODBC Driver 18 for SQL Server};"
-    "Server=192.168.1.36,8433;"
+    "Server=140.134.60.229,5677;"
     "Database=BEST_DB;"
     "UID=sa;"
     "PWD=!ok*L9bicP;"
