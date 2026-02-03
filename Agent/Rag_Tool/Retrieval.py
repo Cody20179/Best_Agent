@@ -5,7 +5,7 @@ import requests, dotenv, os
 
 dotenv.load_dotenv()
 
-BASE_URL = os.getenv("RAGFLOW_BASE_URL", "http://192.168.1.36:8080")
+BASE_URL = os.getenv("RAGFLOW_BASE_URL", "http://192.168.1.36:8080") # 140.134.60.229: 5678
 API_KEY = os.getenv("ragflowapi")
 DATASET_ID = os.getenv("RAGFLOW_DATASET_ID", "a92508d0dd8d11f0b6ae9e3860c79f60")
 

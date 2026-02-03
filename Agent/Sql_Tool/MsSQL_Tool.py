@@ -14,7 +14,6 @@ conn_str = (
     "Connection Timeout=5;"
 )
 
-
 @function_tool
 def Show_Tables():
     "Show all tables in the database"

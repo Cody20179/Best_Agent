@@ -1,4 +1,6 @@
 from agents import Agent, Runner, OpenAIChatCompletionsModel, AsyncOpenAI, ModelSettings
+from Sql_Tool.MsSQL_Tool import Show_Tables, Query_SQL
+from Rag_Tool.Retrieval import Retrieval_Tool_Text
 from dotenv import load_dotenv
 import logging
 import asyncio
@@ -43,7 +45,8 @@ class CustomAgent:
         except Exception as e:
             self.log.error(f"Failed to load system prompt from {self.Prompt_Path}. Error: {e}")
 
-    def Create_Agent(self):
+    def Create_Agent(self, Tool_List = []):
+        """Create or Update Agent"""
         agent = Agent(
             name=self.name,
             instructions=self.System_Prompt,
@@ -52,7 +55,7 @@ class CustomAgent:
                 openai_client=self.external_client
             ),
             model_settings=ModelSettings(**self.Model_Set),
-            tools=[],
+            tools=Tool_List,
         )
         self.log.info(f"Agent {self.name} created.")
         return agent
@@ -84,14 +87,19 @@ class SystemandLogic():
             input = input,
             max_turns = max_turns
         )
+        self.Agent_CAlling_Log.info(f"Run completed with final input: {input}")
         self.Agent_CAlling_Log.info(f"Run completed with final output: {result.final_output}")
         # print(f"[INFO]: {result.final_output}")
         return result.final_output
     
 SystemandLogic = SystemandLogic()
 CustomAgent = CustomAgent(SystemandLogic.Create_Agent_Log)
-AgentA = CustomAgent.Create_Agent()
+AgentA = CustomAgent.Create_Agent(Tool_List=[Show_Tables, Query_SQL, Retrieval_Tool_Text])
 
 if __name__ == "__main__":
-    result = asyncio.run(SystemandLogic.main("Hi", AgentA, max_turns=3))
-    print(result)
+    while True:
+        user_input = input("User: ")
+
+        result = asyncio.run(SystemandLogic.main(user_input, AgentA, max_turns=10))
+
+        print(result)
