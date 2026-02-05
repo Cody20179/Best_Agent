@@ -1,0 +1,116 @@
+services:
+  redis_v3:
+    image: redis:7-alpine
+    container_name: hbus-redis-v3
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./redis_data_v3:/data
+    networks:
+      - hbus-net-v3
+
+  mariadb_v3:
+    image: mariadb:10.11
+    container_name: hbus-mariadb-v3
+    environment:
+      - MARIADB_ROOT_PASSWORD=109109
+      - MARIADB_DATABASE=bus_system
+    command: ["--port=3309"]
+    ports:
+      - "3309:3309"
+    volumes:
+      - ./db_data_v3:/var/lib/mysql
+      - ./bus_system_backup.sql:/docker-entrypoint-initdb.d/bus_system_backup.sql
+    networks:
+      - hbus-net-v3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  client-api-v3:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: "/api"
+    container_name: hbus-client-api-v3
+    ports:
+      - "8901:8901" # 這個要改成跟Line連結的Port
+    environment:
+      REDIS_URL: "redis://hbus-redis-v3:6379/0"
+      FRONTEND_DEFAULT_URL: "https://hualenbus.labelnine.app:8901" # 這個要改成跟Line連結的網址
+      DOCS_USER: "admin"
+      DOCS_PASS: "109109"
+      LINE_CHANNEL_ID: "2008339768"
+      LINE_CHANNEL_SECRET: "e8e798ff0397095f97b1ec5c8e710e8a"
+      APP_SESSION_SECRET: "sd8f7s9df8sdf7"
+      Sender_email: "trkbus.hualien@gmail.com"
+      Password_email: "glrt gvzx cnid gfca"
+      Administrator: "aspring51000@gmail.com"
+      Host: "hbus-mariadb-v3"
+      User: "root"
+      Port: "3309"
+      Password_SQL: "109109"
+      Database: "bus_system"
+      MERCHANT_ID: "970612408190001"
+      TERMINAL_ID: "70002166"
+      STORE_CODE: "288cc740-49e9-4d7b-a47a-6b140024d80e"
+      KEY: "14e4753bc9255e2f9f0843c785e8a67314054be65db37164c6cecbec6e081bf7"
+      IV: "9f1de944d491a73be31b95c8ace7a4ab"
+      LAYMON: "iqrc.epay365.com.tw"
+      TZ: "Asia/Taipei"
+      MAIL_SEND_HOUR: "8"
+      MAIL_SEND_MIN: "0"
+      ALLOWED_RETURN_ORIGINS: "https://hualenbus.labelnine.app:8901,http://localhost:8901"
+    depends_on:
+      mariadb_v3:
+        condition: service_healthy
+      redis_v3:
+        condition: service_started
+    volumes:
+      - "D:/SSL:/ssl:ro"
+    networks:
+      - hbus-net-v3
+    command: >
+      bash -c "sleep 1 && uvicorn Server:app --host 0.0.0.0 --port 8901 --ssl-keyfile /ssl/hualenbus.labelnine.app-key.pem --ssl-certfile /ssl/hualenbus.labelnine.app-chain.pem --reload"
+
+  bus-api-v3:
+    build:
+      context: ./my-bus-system
+      dockerfile: Dockerfile
+    container_name: hbus-bus-api-v3
+    ports:
+      - "8801:8801"
+    environment:
+      Host: "hbus-mariadb-v3"
+      DB_HOST: "hbus-mariadb-v3"
+      User: "root"
+      DB_USER: "root"
+      Port: "3309"
+      DB_PORT: "3309"
+      Password_SQL: "109109"
+      DB_PASSWORD: "109109"
+      Database: "bus_system"
+      DB_NAME: "bus_system"
+    depends_on:
+      mariadb_v3:
+        condition: service_healthy
+      redis_v3:
+        condition: service_started
+    volumes:
+      - "D:/SSL:/ssl:ro"
+    networks:
+      - hbus-net-v3
+    command: >
+      bash -c "npm run serve"
+
+volumes:
+  mysql_data_v3:
+  mariadb_data_v3:
+
+networks:
+  hbus-net-v3:
+    name: hbus-net-v3   # 🔹 固定網路名稱，避免出現 h_bus2_hbus-net-v2 這種變體
+    driver: bridge

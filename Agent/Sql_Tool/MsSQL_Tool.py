@@ -1,14 +1,18 @@
 from agents import function_tool
 import pyodbc
+import dotenv
+import os
+
+dotenv.load_dotenv()
 
 Check_Init = None
 
 conn_str = (
     "Driver={ODBC Driver 18 for SQL Server};"
-    "Server=140.134.60.229,5677;"
-    "Database=BEST_DB;"
-    "UID=sa;"
-    "PWD=!ok*L9bicP;"
+    f"Server={os.getenv('Server')};"
+    f"Database={os.getenv('Database')};"
+    f"UID={os.getenv('UID')};"
+    f"PWD={os.getenv('PWD')};"
     "Encrypt=yes;"
     "TrustServerCertificate=yes;"
     "Connection Timeout=5;"

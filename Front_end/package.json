@@ -1,7 +1,8 @@
 {
-  "name": "my-react-app",
+  "name": "best-agent-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "多對話 AI Agent 前端",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,3 +26,4 @@
     "vite": "^7.2.4"
   }
 }
+
